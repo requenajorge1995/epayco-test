@@ -29,6 +29,6 @@ export class BalanceReloader {
     const newBalance = new UserBalance(user.balance.value + amount);
     user.setBalance(newBalance);
 
-    this.repository.update(user);
+    await this.repository.update(user);
   }
 }

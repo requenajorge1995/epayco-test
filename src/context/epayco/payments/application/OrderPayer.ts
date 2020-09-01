@@ -1,8 +1,10 @@
-import { OrderSearcher } from './OrderSearcher';
+import { OrderSearcher } from '../../order/application/OrderSearcher';
 import { UserSearcher } from '../../user/application/UserSearcher';
 import { NotEnoughBalanceError } from '../domain/NotEnoughBalanceError';
 import { SecurityToken } from '../../../shared/application/SecurityToken';
 import { EmailSender } from '../../../shared/application/EmailSender';
+import { OrderAlreadyPaidValidator } from './OrderAlreadyPaidValidator';
+import { EnoughBalanceValidator } from './EnoughBalanceValidator';
 
 export class OrderPayer {
   private orderSearcher: OrderSearcher;
@@ -19,8 +21,8 @@ export class OrderPayer {
     const order = await this.orderSearcher.run(orderId);
     const user = await this.userSearcher.searchById(order.userId.value);
 
-    if (order.total.value > user.balance.value)
-      throw new NotEnoughBalanceError(`You cant pay <${order.total.value}> for this order. Your balance is <${user.balance.value}>`);
+    OrderAlreadyPaidValidator.validate(order);
+    EnoughBalanceValidator.validate(user, order.total);
 
     const token = SecurityToken.generateToken(user.secret.value);
     this.emailSender.send(user.email.value, `Your security token is ${token}`);

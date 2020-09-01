@@ -13,7 +13,7 @@ export class OrderCreator {
   async run(createOrderRequest: CreateOrderRequest): Promise<void> {
     const { userId, total } = createOrderRequest;
     const id = ObjectId.random().value;
-    const order = Order.fromPrimitives(id, userId, total);
+    const order = Order.fromPrimitives(id, userId, total, false);
 
     await this.repository.save(order);
   }

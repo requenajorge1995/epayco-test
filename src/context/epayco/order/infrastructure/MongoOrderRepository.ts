@@ -14,8 +14,8 @@ export class MongoOrderRepository implements OrderRepository {
   }
 
   async update(order: Order): Promise<void> {
-    const { id: _id, ...otherProps } = order.toPrimitives();
-    await MongoOrderModel.findByIdAndUpdate(_id, { ...otherProps });
+    const { id: _id, isPaid } = order.toPrimitives();
+    await MongoOrderModel.findByIdAndUpdate(_id, { isPaid });
   }
 
   async search(id: OrderId): Promise<Nullable<Order>> {
@@ -30,8 +30,8 @@ export class MongoOrderRepository implements OrderRepository {
   }
 
   private dataModelToOrder(dataModel: IOrderMongo): Order {
-    const { _id, userId, total } = dataModel;
-    return Order.fromPrimitives(_id, userId, total);
+    const { _id, userId, total, isPaid } = dataModel;
+    return Order.fromPrimitives(_id, userId, total, isPaid);
   }
 
 }
