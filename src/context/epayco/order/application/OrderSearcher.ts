@@ -1,8 +1,8 @@
 
 import { Order } from '../domain/Order';
 import { OrderRepository } from '../domain/OrderRepository';
-import { UserId } from '../../shared/UserId';
-import { OrderId } from '../../shared/OrderId';
+import { UserId } from '../../shared/domain/UserId';
+import { OrderId } from '../../shared/domain/OrderId';
 import { OrderNotFound } from '../domain/OrderNotFound';
 
 export class OrderSearcher {

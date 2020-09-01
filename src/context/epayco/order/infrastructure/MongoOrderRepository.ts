@@ -1,9 +1,9 @@
 import { OrderRepository } from '../domain/OrderRepository';
 import { Order } from '../domain/Order';
-import { OrderId } from '../../shared/OrderId';
+import { OrderId } from '../../shared/domain/OrderId';
 import { MongoOrderModel, IOrderMongo } from './MongoOrderModel';
 import { Nullable } from '../../../shared/domain/Nullable';
-import { UserId } from '../../shared/UserId';
+import { UserId } from '../../shared/domain/UserId';
 
 export class MongoOrderRepository implements OrderRepository {
 

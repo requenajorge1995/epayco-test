@@ -3,7 +3,7 @@ import { User } from "../domain/User";
 import { CreateUserRequest } from "./CreateUserRequest";
 import { ObjectId } from "../../../shared/domain/ObjectId";
 import { Validator } from '../../../shared/application/Validator';
-import { SecurityToken } from '../../shared/application/SecurityToken';
+import { SecurityToken } from '../../../shared/application/SecurityToken';
 
 export class UserCreator {
   private repository: UserRepository;
