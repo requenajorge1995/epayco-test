@@ -3,6 +3,7 @@ import { User } from "../domain/User";
 import { CreateUserRequest } from "./CreateUserRequest";
 import { ObjectId } from "../../../shared/domain/ObjectId";
 import { Validator } from '../../../shared/application/Validator';
+import { SecurityToken } from '../../shared/application/SecurityToken';
 
 export class UserCreator {
   private repository: UserRepository;
@@ -16,9 +17,11 @@ export class UserCreator {
   async run(createUserRequest: CreateUserRequest): Promise<void> {
     const { document, name, email, phone } = createUserRequest;
     const id = ObjectId.random().value;
-    const user = User.fromPrimitives(id, document, name, email, phone, 0);
+    const secret = SecurityToken.generateSecret();
+    const user = User.fromPrimitives(id, document, name, email, phone, secret, 0);
 
     await this.validate(user);
+
 
     await this.repository.save(user);
   }

@@ -1,4 +1,4 @@
-import { UserId } from "../../shared/UserId";
+import { UserId } from "../../shared/domain/UserId";
 import { User } from "./User";
 import { Nullable } from '../../../shared/domain/Nullable';
 import { UserDocument } from "./attributes/UserDocument";

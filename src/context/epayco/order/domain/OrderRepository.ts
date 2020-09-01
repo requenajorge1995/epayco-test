@@ -1,6 +1,6 @@
 import { Order } from "./Order";
-import { OrderId } from "../../shared/OrderId";
-import { UserId } from "../../shared/UserId";
+import { OrderId } from "../../shared/domain/OrderId";
+import { UserId } from "../../shared/domain/UserId";
 import { Nullable } from "../../../shared/domain/Nullable";
 
 export interface OrderRepository {

@@ -1,6 +1,6 @@
 import { UserRepository } from '../domain/UserRepository';
 import { User } from '../domain/User';
-import { UserId } from '../../shared/UserId';
+import { UserId } from '../../shared/domain/UserId';
 import { UserDocument } from '../domain/attributes/UserDocument';
 import { UserPhone } from '../domain/attributes/UserPhone';
 import { Nullable } from '../../../shared/domain/Nullable';
@@ -15,8 +15,8 @@ export class MongoUserRepository implements UserRepository {
   }
 
   async update(user: User): Promise<void> {
-    const { id: _id, ...otherProps } = user.toPrimitives();
-    await MongoUserModel.findByIdAndUpdate(_id, { ...otherProps });
+    const { id: _id, balance } = user.toPrimitives();
+    await MongoUserModel.findByIdAndUpdate(_id, { balance });
   }
 
   async search(id: UserId): Promise<Nullable<User>> {
@@ -39,8 +39,8 @@ export class MongoUserRepository implements UserRepository {
   }
 
   private dataModelToUser(dataModel: IUserMongo): User {
-    const { _id, document, name, email, phone, balance } = dataModel;
-    return User.fromPrimitives(_id, document, name, email, phone, balance);
+    const { _id, document, name, email, phone, secret, balance } = dataModel;
+    return User.fromPrimitives(_id, document, name, email, phone, secret, balance);
   }
 
 }
