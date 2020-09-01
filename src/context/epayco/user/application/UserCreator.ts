@@ -16,7 +16,7 @@ export class UserCreator {
   async run(createUserRequest: CreateUserRequest): Promise<void> {
     const { document, name, email, phone } = createUserRequest;
     const id = ObjectId.random().value;
-    const user = User.fromPrimitives(id, document, name, email, phone);
+    const user = User.fromPrimitives(id, document, name, email, phone, 0);
 
     await this.validate(user);
 

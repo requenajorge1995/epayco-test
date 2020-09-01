@@ -14,6 +14,11 @@ export class MongoUserRepository implements UserRepository {
     await userMongoDocument.save();
   }
 
+  async update(user: User): Promise<void> {
+    const { id: _id, ...otherProps } = user.toPrimitives();
+    await MongoUserModel.findByIdAndUpdate(_id, { ...otherProps });
+  }
+
   async search(id: UserId): Promise<Nullable<User>> {
     const userMongo = await MongoUserModel.findById(id.value);
     if (!userMongo) return null;
@@ -26,6 +31,7 @@ export class MongoUserRepository implements UserRepository {
     return this.dataModelToUser(userMongoDocument.toJSON());
   }
 
+
   async searchByDocumentAndPhone(document: UserDocument, phone: UserPhone): Promise<Nullable<User>> {
     const userMongoDocument = await MongoUserModel.findOne({ document: document.value, phone: phone.value });
     if (!userMongoDocument) return null;
@@ -33,8 +39,8 @@ export class MongoUserRepository implements UserRepository {
   }
 
   private dataModelToUser(dataModel: IUserMongo): User {
-    const { _id, document, name, email, phone } = dataModel;
-    return User.fromPrimitives(_id, document, name, email, phone);
+    const { _id, document, name, email, phone, balance } = dataModel;
+    return User.fromPrimitives(_id, document, name, email, phone, balance);
   }
 
 }

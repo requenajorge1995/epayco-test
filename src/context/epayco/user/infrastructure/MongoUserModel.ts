@@ -6,6 +6,7 @@ export interface IUserMongo extends Document {
   name: string;
   email: string;
   phone: string;
+  balance: number;
 }
 
 const userSchema = new Schema({
@@ -13,6 +14,7 @@ const userSchema = new Schema({
   name: String,
   email: String,
   phone: String,
+  balance: Number,
 });
 
 export const MongoUserModel = model<IUserMongo>('User', userSchema);

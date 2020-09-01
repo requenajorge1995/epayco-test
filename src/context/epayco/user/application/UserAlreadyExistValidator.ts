@@ -2,7 +2,7 @@ import { Validator } from '../../../shared/application/Validator';
 import { User } from "../domain/User";
 import { UserRepository } from "../domain/UserRepository";
 import { UserDocument } from "../domain/attributes/UserDocument";
-import { InvalidArgumentError } from "../../../shared/domain/InvalidArgumentError";
+import { UserAlreadyExistError } from '../domain/UserAlreadyExistError';
 
 export class UserAlreadyExistValidator implements Validator<User> {
   private repository: UserRepository;
@@ -13,7 +13,7 @@ export class UserAlreadyExistValidator implements Validator<User> {
 
   async validate(user: User): Promise<void> {
     if (await this.userExist(user.document))
-      throw new InvalidArgumentError(`User with document <${user.document.toString()}> already registered`);
+      throw new UserAlreadyExistError(`User with document <${user.document.value}> already registered`);
   }
 
   private async userExist(document: UserDocument): Promise<boolean> {

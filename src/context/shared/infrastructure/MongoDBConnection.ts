@@ -4,7 +4,7 @@ import { MONGO_DB_URI } from '../../../config/index';
 export class MongoDBConnection {
 
   static async connect() {
-    await mongoose.connect(MONGO_DB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+    await mongoose.connect(MONGO_DB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
     console.log('MongoDB successfully connected');
   }
 
