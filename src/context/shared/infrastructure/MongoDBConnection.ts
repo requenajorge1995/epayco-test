@@ -1,16 +1,24 @@
 import * as mongoose from 'mongoose';
-import { MONGO_DB_URI } from '../../../config/index';
+
+import { dbConfig } from '../../../config/index';
 
 export class MongoDBConnection {
 
-  static async connect() {
-    await mongoose.connect(MONGO_DB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
-    console.log('MongoDB successfully connected');
-  }
+  static async connnect(): Promise<void> {
+    return new Promise(function (resolve) {
+      mongoose.connect(dbConfig.uri, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
+      const db = mongoose.connection;
 
-  static async close() {
-    await mongoose.connection.close();
-    console.log('MongoDB successfully closed');
+      db.on('error', function (error: Error) {
+        console.error('Failed to connect to database', error);
+        process.exit(1);
+      });
+
+      db.once('open', function () {
+        console.log('MongoDB successfully connected');
+        resolve();
+      });
+    });
   }
 
 }
