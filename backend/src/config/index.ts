@@ -4,4 +4,4 @@ export const dbConfig = {
 
 export const sessionSecret = 'epayco123';
 
-export const serverPort = 3000;
+export const serverPort = 3001;

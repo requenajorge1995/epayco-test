@@ -33,12 +33,16 @@ export class ConfirmPaymentController implements Controller {
       switch (true) {
         case stack.includes('InvalidSecurityTokenError'):
           res.status(httpStatus.UNAUTHORIZED).json({ message: error.message, data: null });
+          break;
         case stack.includes('OrderAlreadyPaidError'):
           res.status(httpStatus.PRECONDITION_REQUIRED).json({ message: error.message, data: null });
+          break;
         case stack.includes('NotEnoughBalanceError'):
           res.status(httpStatus.PRECONDITION_FAILED).json({ message: error.message, data: null });
+          break;
         case stack.includes('InvalidArgumentError'):
           res.status(httpStatus.BAD_REQUEST).json({ message: error.message, data: null });
+          break;
         default:
           res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: 'server error', data: null });
       }

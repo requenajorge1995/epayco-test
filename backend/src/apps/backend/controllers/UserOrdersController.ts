@@ -1,15 +1,17 @@
-import { BalanceChecker } from "../../../context/epayco/user/application/BalanceChecker";
+import { UserSearcher } from "../../../context/epayco/user/application/UserSearcher";
 import { Controller } from "./Controller";
-import { Request, Response } from 'express';
-import httpStatus from "http-status";
+import { Request, Response, NextFunction } from 'express';
 import { isNullOrUndefined } from './isNullOrUndefined';
+import { OrdersListter } from "../../../context/epayco/user/application/OrdersListter";
+import httpStatus from "http-status";
+import { InvalidArgumentError } from "../../../context/shared/domain/InvalidArgumentError";
 
 
-export class CheckBalanceController implements Controller {
-  private checker: BalanceChecker;
+export class UserOrdersController implements Controller {
+  private ordersListter: OrdersListter;
 
-  constructor(checker: BalanceChecker) {
-    this.checker = checker;
+  constructor(ordersListter: OrdersListter) {
+    this.ordersListter = ordersListter;
     this.run = this.run.bind(this);
   }
 
@@ -19,19 +21,21 @@ export class CheckBalanceController implements Controller {
 
       isNullOrUndefined({ document, phone });
 
-      const balance = await this.checker.run({
+      const orders = await this.ordersListter.run({
         document,
         phone,
       });
 
-      res.status(httpStatus.OK).json({ message: 'OK', data: { balance } });
+      res.status(httpStatus.OK).json({ message: 'OK', data: { orders } });
     } catch (error) {
       const stack = error.stack as string;
       switch (true) {
         case stack.includes('UserNotFound'):
           res.status(httpStatus.NOT_FOUND).json({ message: error.message, data: null });
+          break;
         case stack.includes('InvalidArgumentError'):
           res.status(httpStatus.BAD_REQUEST).json({ message: error.message, data: null });
+          break;
         default:
           res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: 'server error', data: null });
       }

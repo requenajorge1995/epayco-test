@@ -29,8 +29,10 @@ export class CreateUserController implements Controller {
       switch (true) {
         case stack.includes('UserAlreadyExistError'):
           res.status(httpStatus.CONFLICT).json({ message: error.message, data: null });
+          break;
         case stack.includes('InvalidArgumentError'):
           res.status(httpStatus.BAD_REQUEST).json({ message: error.message, data: null });
+          break;
         default:
           res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: 'server error', data: null });
       }
