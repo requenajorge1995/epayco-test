@@ -1,4 +1,5 @@
 export interface CreateOrderRequest {
-  userId: string;
+  document: string;
+  phone: string;
   total: number;
 }

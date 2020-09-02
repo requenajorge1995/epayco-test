@@ -1,12 +1,12 @@
 import * as validator from 'email-validator';
 import { InvalidArgumentError } from './InvalidArgumentError';
+import { StringValue } from './StringValue';
 
-export class EmailValue {
-  readonly value: string;
+export class EmailValue extends StringValue {
 
   constructor(value: string) {
+    super(value);
     this.ensureIsValid(value);
-    this.value = value;
   }
 
   private ensureIsValid(value: string) {
