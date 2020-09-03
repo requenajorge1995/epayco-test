@@ -14,7 +14,8 @@ export class UserInfoGetter {
       name: user.name.value,
       document: user.document.value,
       email: user.email.value,
-      phone: user.phone.value
+      phone: user.phone.value,
+      balance: user.balance.value
     };
   };
 };
