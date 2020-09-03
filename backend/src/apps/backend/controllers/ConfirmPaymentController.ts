@@ -14,23 +14,28 @@ export class ConfirmPaymentController implements Controller {
 
   async run(req: Request, res: Response): Promise<void> {
     try {
+      res.cookie("bsaSession", req.session.id, { httpOnly: false });
+      res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+      res.header('Access-Control-Allow-Credentials', 'true');
       const { token } = req.body;
       const orderId = req.session?.orderId;
 
       if (!orderId)
-        res.status(httpStatus.FORBIDDEN).json({ message: 'Invalid session ID', data: null });
+        throw new Error('InvalidSessionID');
 
       isNullOrUndefined({ token });
-
       await this.confirmer.run({
         orderId,
         token,
       });
-
       res.status(httpStatus.OK).json({ message: 'Payment confirmed and charged successfully', data: null });
+
     } catch (error) {
       const stack = error.stack as string;
       switch (true) {
+        case stack.includes('InvalidSessionID'):
+          res.status(httpStatus.FORBIDDEN).json({ message: 'Invalid session ID', data: null });
+          break;
         case stack.includes('InvalidSecurityTokenError'):
           res.status(httpStatus.UNAUTHORIZED).json({ message: error.message, data: null });
           break;

@@ -15,8 +15,8 @@ router.use(function getSessionByBody(req: Request, res: Response, next: NextFunc
 
 router.use(session({
   secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: false
+  resave: true,
+  saveUninitialized: false,
 }));
 
 router.post("/pay-order", payOrderController.run);
