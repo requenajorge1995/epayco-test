@@ -1,13 +1,14 @@
 import { call, put, takeLatest, all, select } from "redux-saga/effects";
-import { GET_ORDERS_START, GetOrdersStartAction, PAY_ORDER_START, CREATE_ORDER_START, CreateOrderStartAction, PayOrderStartAction } from "./order.types";
+import { GET_ORDERS_START, PAY_ORDER_START, CREATE_ORDER_START, CreateOrderStartAction, PayOrderStartAction } from "./order.types";
 import { getOrders as getOrdersFromApi, newOrder, payOrder as payOrderFromApi, confirmPayment } from '../../Api/requests';
 
 import { selectUserCredential } from '../user/user.selectors';
 import { UserCredential } from "../user/user.types";
 import { OrderResponse } from "../../Api/response.types";
 import { getOrdersSuccess, getOrdersFailure, getOrdersStart } from "./order.actions";
+import { getBalanceStart } from "../user/user.actions";
 
-export default function* userSagas() {
+export default function* orderSagas() {
   yield all([
     call(onGetOrdersStart),
     call(onCreateOrderStart),
@@ -52,11 +53,12 @@ function* payOrder(payOrderStartAction: PayOrderStartAction) {
   try {
     const orderId = payOrderStartAction.payload;
     const sessionId: string = yield call(payOrderFromApi, orderId);
-    const token = prompt("Insert token to confirm payments");
+    const token = prompt("Insert token to confirm the payment");
     if (!token)
       return;
     yield call(confirmPayment, { sessionId, token });
     yield put(getOrdersStart());
+    yield put(getBalanceStart());
   } catch (error) {
     alert(error.message);
   }

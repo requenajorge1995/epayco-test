@@ -9,7 +9,7 @@ const sagaMiddleware = createSagaMiddleware();
 
 const middlewares: any[] = [sagaMiddleware];
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV !== 'development') {
   middlewares.push(logger);
 }
 

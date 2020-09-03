@@ -9,6 +9,7 @@ interface ApiResponse {
 }
 
 export async function getUserInfo(userCredential: UserCredential): Promise<UserResponse> {
+  console.log(userCredential);
   const apiResponse = await postRequestMaker('/user', userCredential);
   return apiResponse.data as UserResponse;
 }
@@ -19,7 +20,7 @@ export async function newUser(newUserRequest: NewUserRequest): Promise<void> {
 
 export async function getBalance(userCredential: UserCredential): Promise<number> {
   const apiResponse = await postRequestMaker('/user/balance', userCredential);
-  return apiResponse.data as number;
+  return apiResponse.data.balance as number;
 }
 
 export async function reloadBalance(reloadBalanceRequest: ReloadBalanceRequest): Promise<void> {
@@ -28,7 +29,7 @@ export async function reloadBalance(reloadBalanceRequest: ReloadBalanceRequest):
 
 export async function getOrders(userCredential: UserCredential): Promise<OrderResponse[]> {
   const apiResponse = await postRequestMaker('/orders', userCredential);
-  return apiResponse.data as OrderResponse[];
+  return apiResponse.data.orders as OrderResponse[];
 }
 
 export async function newOrder(newOrderRequest: NewOrderRequest): Promise<void> {
@@ -36,8 +37,9 @@ export async function newOrder(newOrderRequest: NewOrderRequest): Promise<void> 
 }
 
 export async function payOrder(orderId: string): Promise<string> {
-  const apiResponse = await postRequestMaker('/payments/pay-order', orderId);
-  return apiResponse.data as string;
+
+  const apiResponse = await postRequestMaker('/payments/pay-order', { orderId });
+  return apiResponse.data.sessionId as string;
 }
 
 export async function confirmPayment(paymentConfirmationRequest: PaymentConfirmationRequest): Promise<void> {
@@ -45,20 +47,17 @@ export async function confirmPayment(paymentConfirmationRequest: PaymentConfirma
 }
 
 async function postRequestMaker(path: string, body: any): Promise<ApiResponse> {
-  const response = await fetch(URL + path, bodyMaker(body));
+  const response = await fetch(URL + path, {
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    body: JSON.stringify(body)
+  });
   const apiResponse = await response.json() as ApiResponse;
   if (!response.ok) {
     throw new Error(apiResponse.message);
   }
   return apiResponse;
-}
-
-function bodyMaker(data: any) {
-  return {
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    method: 'POST',
-    body: JSON.stringify(data)
-  };
 }

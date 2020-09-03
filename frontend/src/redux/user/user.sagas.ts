@@ -37,6 +37,7 @@ function* signIn(signInStartAction: SignInStartAction) {
     yield put(signInSuccess(userResponse));
   } catch (error) {
     yield put(signInFailure(error));
+    alert(error.message);
   }
 }
 
@@ -54,7 +55,6 @@ function* signUp(signUpStartAction: SignUpStartAction) {
 function* getBalance() {
   try {
     const userCredential: UserCredential = yield select(selectUserCredential);
-    console.log({ userCredential });
     const balance: number = yield call(getBalanceFromApi, userCredential);
     yield put(getBalanceSuccess(balance));
   } catch (error) {
@@ -72,74 +72,3 @@ function* reloadBalance(reloadBalanceStartAction: ReloadBalanceStartAction) {
     alert(error.message);
   }
 }
-
-
-
-
-
-
-
-// export function* onSignUpStart() {
-//   yield takeLatest(SIGN_UP_START, SignUp);
-// }
-
-
-// export function* onSignInWithGoogle() {
-//   yield takeLatest(GOOGLE_SIGN_IN_START, signInWithGoogle);
-// }
-
-// export function* onCheckUserSesion() {
-//   yield takeLatest(CHECK_USER_SESSION, isUserAuthenticated);
-// }
-
-// export function* onSignOut() {
-//   yield takeLatest(SIGN_OUT_START, signOut);
-// }
-
-// export function* SignUp(signUpStartAction: SignUpStartAction) {
-//   const { email, password, ...additionalData } = signUpStartAction.payload;
-//   try {
-//     const user = yield call(createUserWithEmailAndPassword, email, password);
-//     yield getSnapshotFromUserAuth(user, additionalData);
-//   } catch (error) {
-//     yield put(signUpFailure(error));
-//   }
-// }
-
-// export function* signInWithEmail(emailSignInStartAction: EmailSignInStartAction) {
-//   const { email, password } = emailSignInStartAction.payload;
-//   try {
-//     const user = yield call(signInWithEmailAndPassword, email, password);
-//     yield getSnapshotFromUserAuth(user);
-//   } catch (error) {
-//     yield put(signUpFailure(error));
-//   }
-// }
-
-// export function* signInWithGoogle() {
-//   try {
-//     const user = yield call(signInWithGooglePopup);
-//     yield getSnapshotFromUserAuth(user);
-//   } catch (error) {
-//     yield put(signInFailure(error));
-//   }
-// }
-
-// export function* isUserAuthenticated() {
-//   try {
-//     const user = yield call(getCurrentUser);
-//     if (!user) return;
-//     yield call(getSnapshotFromUserAuth, user);
-//   } catch (error) {
-//     yield put(signInFailure(error));
-//   }
-// }
-
-// export function* signOut() {
-//   try {
-//     yield call(firebaseLogOut);
-//     yield put(signOutSuccess());
-//   } catch (error) {
-//     yield put(signOutFailure(error));
-//   }
-// }

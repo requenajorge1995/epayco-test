@@ -1,0 +1,10 @@
+.main-view {
+  display: grid;
+  height: 100%;
+  width: 100%;
+  grid-template-rows: 1fr 2fr;
+  padding: 1rem;
+}
+.main-view > * {
+  border-bottom: 1px solid black;
+}

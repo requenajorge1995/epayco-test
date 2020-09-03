@@ -1,0 +1,22 @@
+.order-container {
+  height: fit-content;
+  text-align: center;
+  text-transform: uppercase;
+  border: 1px solid lightgray;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  user-select: none;
+  padding: 0.5rem;
+
+  p {
+    font-size: 0.8rem;
+  }
+
+  &:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3);
+  }
+
+  &.selected {
+    background-color: lightgray;
+  }
+}
