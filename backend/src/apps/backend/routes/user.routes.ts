@@ -5,9 +5,11 @@ import container from '../../../config/dependency-injection';
 const createUserController = container.get('CreateUserController') as Controller;
 const checkBalanceController = container.get('CheckBalanceController') as Controller;
 const reloadBalanceController = container.get('ReloadBalanceController') as Controller;
+const getUserInfoController = container.get('GetUserInfoController') as Controller;
 
 const router = express.Router();
 
+router.post("/", getUserInfoController.run);
 router.post("/new", createUserController.run);
 router.post("/balance", checkBalanceController.run);
 router.post("/reload", reloadBalanceController.run);

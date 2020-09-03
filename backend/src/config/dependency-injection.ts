@@ -4,8 +4,9 @@ import { MongoDBConnection } from '../context/shared/infrastructure/MongoDBConne
 import { MongoUserRepository } from '../context/epayco/user/infrastructure/MongoUserRepository';
 import { MongoOrderRepository } from '../context/epayco/order/infrastructure/MongoOrderRepository';
 
-import { UserSearcher } from '../context/epayco/user/application/UserSearcher';
 import { UserCreator } from '../context/epayco/user/application/UserCreator';
+import { UserSearcher } from '../context/epayco/user/application/UserSearcher';
+import { UserInfoGetter } from '../context/epayco/user/application/UserInfoGetter';
 import { BalanceReloader } from '../context/epayco/user/application/BalanceReloader';
 import { BalanceChecker } from '../context/epayco/user/application/BalanceChecker';
 import { OrderCreator } from '../context/epayco/order/application/OrderCreator';
@@ -18,6 +19,7 @@ import { UserAlreadyExistValidator } from '../context/epayco/user/application/Us
 import { EmailSender } from '../context/shared/application/EmailSender';
 
 import { CreateUserController } from '../apps/backend/controllers/CreateUserController';
+import { GetUserInfoController } from '../apps/backend/controllers/GetUserInfoController';
 import { CreateOrderController } from '../apps/backend/controllers/CreateOrderController';
 import { CheckBalanceController } from '../apps/backend/controllers/CheckBalanceController';
 import { ReloadBalanceController } from '../apps/backend/controllers/ReloadBalanceController';
@@ -38,6 +40,9 @@ container
 container
   .register('UserSearcher', UserSearcher)
   .addArgument(new Reference('UserRepository'));
+container
+  .register('UserInfoGetter', UserInfoGetter)
+  .addArgument(new Reference('UserSearcher'));
 container
   .register('UserAlreadyExistValidator', UserAlreadyExistValidator)
   .addArgument(new Reference('UserRepository'));
@@ -84,6 +89,9 @@ container
   .register('CreateUserController', CreateUserController)
   .addArgument(new Reference('UserCreator'));
 container
+  .register('GetUserInfoController', GetUserInfoController)
+  .addArgument(new Reference('UserInfoGetter'));
+container
   .register('CreateOrderController', CreateOrderController)
   .addArgument(new Reference('OrderCreator'));
 container
@@ -95,7 +103,6 @@ container
 container
   .register('ReloadBalanceController', ReloadBalanceController)
   .addArgument(new Reference('BalanceReloader'));
-
 
 container.compile();
 export default container;
