@@ -16,11 +16,11 @@ export class GetUserInfoController implements Controller {
     try {
       const { document, phone } = req.body;
       isNullOrUndefined({ document, phone });
-      await this.infoGetter.run({
+      const userInfo = await this.infoGetter.run({
         document,
         phone,
       });
-      res.status(httpStatus.OK).json({ message: 'ok', data: null });
+      res.status(httpStatus.OK).json({ message: 'ok', data: userInfo });
     } catch (error) {
       const stack = error.stack as string;
       switch (true) {
